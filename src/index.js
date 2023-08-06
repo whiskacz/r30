@@ -1,17 +1,47 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
+import Element from './components/Element';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const url = "https://jsonplaceholder.typicode.com/photos"
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+function R30App () {
+
+    const [posts, setPosts] = useState([])
+
+    useEffect(() =>  {
+        axios.get(url)
+        .then((response) => setPosts(response.data))
+    },[posts])
+
+    // console.log(posts) 
+
+    return (
+        <div style={{
+            display:"flex",
+            flexDirection:"column",
+            width:"80%",
+            minHeight:"100vh",
+            justifyContent:"center",
+            alignItems:"center",
+            backgroundColor:"#ddd",
+        }}>
+
+            <span style={{
+                fontSize:"2rem"
+            }}>
+                Image Grid Scroll with Lazy Load    
+            </span>
+
+            {posts.map((post) => (
+                <Element key={post.id} img={post.url} title={post.title} />
+            ))}
+            
+            
+        </div>
+    )
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+root.render(<R30App />)
